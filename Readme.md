@@ -1,22 +1,7 @@
 # Channel Manager Readme
 Channel Manager is a JavaScript module, aimed to provide a standardized way of communication between different modules of the app. It suits apps that are build using **Pub-Sub** pattern.
 
-```mermaid
-graph RL
-
-OM1(Module) --> OC1(< Other channel >)
-
-C(Module C) -- data --> Ch(< Channel >)
-Ch --> A(Module A)
-Ch --> B(Module B)
-
-OM2(Module) --> OC2(< Other channel >)
-
-style A fill:#ffb
-style B fill:#ffb
-style C fill:#ffb
-style Ch fill:#ffb
-```
+![graph](./graph.png)
 
 ## Why it is useful?
 When developing an app that consists of several modules, one problem that might arise is that modules become too "dependent" on each other's code. For example, if you change function's name in one module, you will also need to change that name in all modules that imported that function from initial module. The problem even worsens, when multiple developers are working on the same app.
