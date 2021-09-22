@@ -53,6 +53,10 @@ const ChannelManager = (function() {
 
   return {
     openChannel(name) {
+      if (!checkType(name, 'string', 'openChannel')) {
+        return;
+      }
+
       channels[name] = {};
     },
     closeChannel() {},
