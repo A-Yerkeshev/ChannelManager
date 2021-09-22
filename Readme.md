@@ -36,7 +36,7 @@ Now, every time `sender.js` sends new data, the callback that was passed to `.li
 * `ChannelManager.openChannel( <channel-name:string> )`
 Opens new channel. This function only needs to be run in first module. Has no effect when called again with same argument.
 
-*`ChannelManager.exists( <channel-name:string> )`
+* `ChannelManager.exists( <channel-name:string> )`
 Checks if channel with given name already exists. Output is **boolean**.
 
 * `ChannelManager.sendData( <channel-name:string>, <data>, <?data-headers:object>)`
