@@ -75,6 +75,7 @@ const ChannelManager = (function() {
     getFormat() {},
     exists(name) {
       if (!checkType(name, 'string', 'exists')) {return;}
+      if (isEmptyString(name, 'exists')) {return;}
 
       return name in channels;
     }
