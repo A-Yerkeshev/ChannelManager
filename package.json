@@ -1,0 +1,19 @@
+{
+  "name": "channelmanager",
+  "version": "1.0.0",
+  "description": "Channel Manager is a JavaScript module, aimed to provide a standardized way of communication between different modules of the app. It suits apps that are build using Pub-Sub pattern.",
+  "main": "ChannelManager.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-Yerkeshev/ChannelManager.git"
+  },
+  "author": "A-Yerkesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/A-Yerkeshev/ChannelManager/issues"
+  },
+  "homepage": "https://github.com/A-Yerkeshev/ChannelManager#readme"
+}
