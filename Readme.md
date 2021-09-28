@@ -78,7 +78,7 @@ Specifies, which callbacks need to be run when new data is sent to the channel. 
 * `ChannelManager.listenOnce( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`
 Works same way as `.listen()` method, but callbacks fire only once;
 
-* `ChannelManager.setFormat( <format:keyword | object> )`
+* `ChannelManager.setFormat( <channel-name:string>, <format:keyword | object> )`
 Sets the format, in which data can be sent through the channel. Keyword can be:
 `'ANY'`,
 `'STRING'`,
