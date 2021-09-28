@@ -9,6 +9,8 @@ When developing an app that consists of several modules, one problem that might 
 By using Pub-Sub design pattern and standardized ways of sharing data, components become more independent from each other, as one module does not need to know anything about other modules. All it needs to know is the **name** of data channel and in which **format** the data is sent through this channel.
 
 ## How it works?
+**1. Download ChannelManager.js**
+
 For this example let's call the module that sends data **sender.js** and component that receives the data - **receiver.js**. That's what we need to do to setup our data channel:
 
 ### In sender.js:
