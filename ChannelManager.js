@@ -67,7 +67,16 @@ const ChannelManager = (function() {
 
       channels[name] = {};
     },
-    closeChannel() {},
+    closeChannel(name) {
+      if (!checkType(name, 'string', 'closeChannel')) {return;}
+      if (isEmptyString(name, 'closeChannel')) {return;}
+
+      if (ChannelManager.exists(name)) {
+        delete channels[name];
+      } else {
+        throw new Error (`Channel with name '${name}'' does not exist`);
+      }
+    },
     sendData() {},
     listen() {},
     listenOnce() {},
