@@ -77,10 +77,15 @@ const ChannelManager = (function() {
         throw new Error (`Channel with name '${name}'' does not exist`);
       }
     },
-    sendData() {},
+    // headers - data headers object
+    sendData(name, data, headers) {},
     listen() {},
     listenOnce() {},
-    setFormat() {},
+    // format can either be
+    // 'STRING', 'NUMBER', 'BOOLEAN',
+    // 'ARRAY', 'OBJECT', 'FUNCTION',
+    // 'BIGINT' or object
+    setFormat(format) {},
     getFormat() {},
     exists(name) {
       if (!checkType(name, 'string', 'exists')) {return;}

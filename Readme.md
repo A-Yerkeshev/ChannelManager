@@ -80,20 +80,21 @@ Works same way as `.listen()` method, but callbacks fire only once;
 
 * `ChannelManager.setFormat( <format:keyword | object> )`
 Sets the format, in which data can be sent through the channel. Keyword can be:
+`'ANY'`,
 `'STRING'`,
- `'NUMBER'`,
- `'BOOLEAN'`,
- `'ARRAY'`,
- `'OBJECT'`,
- `'FUNCTION'`,
- `'BIGINT'`
+`'NUMBER'`,
+`'BOOLEAN'`,
+`'UNDEFINED'`,
+`'ARRAY'`,
+`'OBJECT'`,
+`'FUNCTION'`,
+`'BIGINT'`
  Also, data format can be an object with properties that must be present in data object. Like so:
  ```
- // Values can be anything, checker is going to look only at keys
  {
-  width: undefined,
-  height: null,
-  length: 'any-value'
+  width: 'NUMBER',
+  height: 'NUMBER',
+  color: 'STRING'
  }
  ```
 
