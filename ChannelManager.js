@@ -10,7 +10,7 @@ const ChannelManager = (function() {
         if (typeof input === 'string') {
           return true;
         } else {
-          throw new Error(`Argument passed to ${functionName} function must be of 'string' type.`)
+          throw new Error(`Argument passed to .${functionName}() function must be of 'string' type.`);
           return false;
         }
         break;
@@ -18,7 +18,7 @@ const ChannelManager = (function() {
         if (typeof input === 'number') {
           return true;
         } else {
-          throw new Error(`Argument passed to ${functionName} function must be of 'number' type.`)
+          throw new Error(`Argument passed to .${functionName}() function must be of 'number' type.`);
           return false;
         }
         break;
@@ -26,7 +26,7 @@ const ChannelManager = (function() {
         if (typeof input === 'boolean') {
           return true;
         } else {
-          throw new Error(`Argument passed to ${functionName} function must be of 'boolean' type.`)
+          throw new Error(`Argument passed to .${functionName}() function must be of 'boolean' type.`);
           return false;
         }
         break;
@@ -34,7 +34,7 @@ const ChannelManager = (function() {
         if (typeof input === 'object') {
           return true;
         } else {
-          throw new Error(`Argument passed to ${functionName} function must be of 'object' type.`)
+          throw new Error(`Argument passed to .${functionName}() function must be of 'object' type.`);
           return false;
         }
         break;
@@ -42,7 +42,7 @@ const ChannelManager = (function() {
         if (typeof input === 'function') {
           return true;
         } else {
-          throw new Error(`Argument passed to ${functionName} function must be of 'function' type.`)
+          throw new Error(`Argument passed to .${functionName}() function must be of 'function' type.`);
           return false;
         }
         break;
@@ -51,11 +51,19 @@ const ChannelManager = (function() {
     }
   }
 
+  function isEmptyString(string, functionName) {
+    if (string === '') {
+      throw new Error(`Argument passed to .${functionName}() cannot be empty string.`);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return {
     openChannel(name) {
-      if (!checkType(name, 'string', 'openChannel')) {
-        return;
-      }
+      if (!checkType(name, 'string', 'openChannel')) {return;}
+      if (isEmptyString(name, 'openChannel')) {return;}
 
       channels[name] = {};
     },
@@ -65,8 +73,16 @@ const ChannelManager = (function() {
     listenOnce() {},
     setFormat() {},
     getFormat() {},
-    exists() {}
+    exists(name) {
+      if (!checkType(name, 'string', 'exists')) {return;}
+
+      return name in channels;
+    }
   }
 })();
 
-export default ChannelManager;
+// FOR BROWSERS
+//export default ChannelManager;
+
+// FOR NODE.JS
+module.exports = ChannelManager;
