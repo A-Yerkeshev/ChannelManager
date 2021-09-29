@@ -73,11 +73,13 @@ const ChannelManager = (function() {
         break;
       case 'object':
         // Enumerate format object properties and check if same properties exist on data object and their data type is valid
-        for (key in format) {
-          if (data[key] && validateByKeyword(data, format[key])) {
-            return true;
-          } else {return false;}
+        for (let key in format) {
+          if (!data.hasOwnProperty(key) || !validateByKeyword(data[key], format[key])) {
+            return false;
+          }
         }
+
+        return true;
         break;
       default:
         throw new Error(`Format passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
@@ -109,7 +111,7 @@ const ChannelManager = (function() {
         break;
       case 'OBJECT':
         // Check if data is object, not array and not null
-        if (typeof data === 'object' && !Array.isArray(data) && data) {
+        if (typeof data === 'object' && !Array.isArray(data) && data != null) {
           return true;
         } else {return false;}
         break;
@@ -132,7 +134,9 @@ const ChannelManager = (function() {
 
       if (!channels[name]) {
         channels[name] = {
-          format: 'ANY'
+          format: 'ANY',
+          dataHeaders: null,
+          data: null
         }
       }
     },
@@ -146,20 +150,32 @@ const ChannelManager = (function() {
 
       delete channels[name];
     },
-    sendData(name, data, headers) {
+    sendData(name, data, headers={}) {
       // headers - data headers object
       if (arguments.length < 2) {
         throw new Error('.sendData() function expects at least 2 arguments: channel name and data.');
         return;
       }
+      if (!checkType(name, 'string', 'sendData')) {return;}
       if (isEmptyString(name, 'sendData')) {return;}
       if (!ChannelManager.exists(name)) {
-        throw new Error (`Channel with name '${name}' does not exist`);
+        throw new Error (`Channel with name '${name}' does not exist.`);
         return;
       }
 
       // Validate data according to the format
-      validateData(data, channels[name].format);
+      if (!validateData(data, channels[name].format)) {
+        throw new Error(`Data passed to .sendData() function does not match data format for '${name}' channel. Run .getFormat('${name}') to check the data format.`);
+        return;
+      }
+
+      if (typeof headers !== 'object' || Array.isArray(headers) || headers == null) {
+        throw new Error('Data headers argument passed to .sendData() function must be an object.');
+        return;
+      }
+
+      channels[name].dataHeaders = headers;
+      channels[name].data = data;
     },
     listen() {},
     listenOnce() {},
@@ -172,6 +188,8 @@ const ChannelManager = (function() {
         throw new Error('.setFormat() function expects 2 arguments: channel name and data format.');
         return;
       }
+      if (!checkType(name, 'string', 'setFormat')) {return;}
+      if (isEmptyString(name, 'setFormat')) {return;}
       if (!ChannelManager.exists(name)) {
         throw new Error (`Channel with name '${name}' does not exist.`);
         return;
