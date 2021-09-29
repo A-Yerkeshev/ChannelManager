@@ -15,14 +15,16 @@ For this example let's call the module that sends data **sender.js** and compone
 
 ### In sender.js:
 ```
-  import ChannelManager from <file-location> as CM
+  import ChannelManager from <file-location> as CM // --In browser
+  const CM = require(<file-location>) // --In Node
 
   CM.openChannel('channel-name');
   CM.sendData('channel-name', <your-data>);
 ```
 ### In receiver.js:
 ```
-  import ChannelManager from <file-location> as CM
+  import ChannelManager from <file-location> as CM // --In browser
+  const CM = require(<file-location>) // --In Node
 
   CM.listen('channel-name', (data) => {
     console.log('Doing something with data');

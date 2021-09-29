@@ -94,6 +94,9 @@ const ChannelManager = (function() {
     }
 
     switch (formatKeyword) {
+      case 'ANY':
+        return true;
+        break;
       case 'STRING':
         return typeof data === 'string';
         break;
@@ -127,6 +130,34 @@ const ChannelManager = (function() {
     }
   }
 
+  function runCallbacks(callbacks, data, headers) {
+    callbacks.forEach((callback) => {
+      if (!checkType(callback, 'function', 'runCallbacks')) {return;}
+
+      callback(data, headers);
+    })
+  }
+
+  function runCallbacksOnce(callbacks, data, headers, name) {
+    if (!ChannelManager.exists(name)) {
+      throw new Error (`Channel with name '${name}' does not exist.`);
+      return;
+    }
+
+    callbacks.forEach((callback) => {
+      if (!checkType(callback, 'function', 'runCallbacks')) {return;}
+
+      callback(data, headers);
+
+      if (channels[name].tmpListeners.has(callback)) {
+        channels[name].tmpListeners.delete(callback);
+      } else {
+        throw new Error(`Callback with name '${callback.name}' does not listen to channel '${name}'.`);
+        return;
+      }
+    })
+  }
+
   return {
     openChannel(name) {
       if (!checkType(name, 'string', 'openChannel')) {return;}
@@ -136,7 +167,9 @@ const ChannelManager = (function() {
         channels[name] = {
           format: 'ANY',
           dataHeaders: null,
-          data: null
+          data: null,
+          listeners: new Set(),
+          tmpListeners: new Set()
         }
       }
     },
@@ -174,10 +207,32 @@ const ChannelManager = (function() {
         return;
       }
 
-      channels[name].dataHeaders = headers;
-      channels[name].data = data;
+      const channel = channels[name];
+
+      channel.dataHeaders = headers;
+      channel.data = data;
+
+      runCallbacks(channel.listeners, data, headers);
+      runCallbacksOnce(channel.tmpListeners, data, headers, name);
     },
-    listen() {},
+    listen(name, ...callbacks) {
+      if (arguments.length < 2) {
+        throw new Error('.listen() function expects at least 2 arguments: channel name and callback.');
+        return;
+      }
+      if (!checkType(name, 'string', 'listen')) {return;}
+      if (isEmptyString(name, 'listen')) {return;}
+      if (!ChannelManager.exists(name)) {
+        throw new Error (`Channel with name '${name}' does not exist.`);
+        return;
+      }
+
+      callbacks.forEach((callback) => {
+        if (!checkType(callback, 'function', 'listen')) {return;}
+      })
+
+      channels[name].listeners = new Set(Array.from(channels[name].listeners).concat(callbacks));
+    },
     listenOnce() {},
     setFormat(name, format) {
       // format can either be
