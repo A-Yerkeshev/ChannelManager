@@ -61,6 +61,70 @@ const ChannelManager = (function() {
     }
   }
 
+  function validateData(data, format) {
+    if (arguments.length !== 2) {
+      throw new Error('validateData() function expects 2 arguments: data and data format.');
+      return;
+    }
+
+    switch (typeof format) {
+      case 'string':
+        return validateByKeyword(data, format);
+        break;
+      case 'object':
+        // Enumerate format object properties and check if same properties exist on data object and their data type is valid
+        for (key in format) {
+          if (data[key] && validateByKeyword(data, format[key])) {
+            return true;
+          } else {return false;}
+        }
+        break;
+      default:
+        throw new Error(`Format passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
+        return;
+    }
+  }
+
+  function validateByKeyword(data, formatKeyword) {
+    if (arguments.length !== 2) {
+      throw new Error('validateByKeyword() function expects 2 arguments: data and format keyword.');
+      return;
+    }
+
+    switch (formatKeyword) {
+      case 'STRING':
+        return typeof data === 'string';
+        break;
+      case 'NUMBER':
+        return typeof data === 'number';
+        break;
+      case 'BOOLEAN':
+        return typeof data === 'boolean';
+        break;
+      case 'UNDEFINED':
+        return typeof data === 'undefined';
+        break;
+      case 'ARRAY':
+        return Array.isArray(data);
+        break;
+      case 'OBJECT':
+        // Check if data is object, not array and not null
+        if (typeof data === 'object' && !Array.isArray(data) && data) {
+          return true;
+        } else {return false;}
+        break;
+      case 'FUNCTION':
+        return typeof data === 'function';
+        break;
+      case 'BIGINT':
+        return typeof data === 'bigint';
+        break;
+      default:
+        throw new Error(`Keyword passed to validateByKeyword() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT'.`);
+        return;
+    }
+  }
+
   return {
     openChannel(name) {
       if (!checkType(name, 'string', 'openChannel')) {return;}
@@ -76,7 +140,7 @@ const ChannelManager = (function() {
       if (!checkType(name, 'string', 'closeChannel')) {return;}
       if (isEmptyString(name, 'closeChannel')) {return;}
       if (!ChannelManager.exists(name)) {
-        throw new Error (`Channel with name '${name}' does not exist`);
+        throw new Error (`Channel with name '${name}' does not exist.`);
         return;
       }
 
@@ -84,6 +148,18 @@ const ChannelManager = (function() {
     },
     sendData(name, data, headers) {
       // headers - data headers object
+      if (arguments.length < 2) {
+        throw new Error('.sendData() function expects at least 2 arguments: channel name and data.');
+        return;
+      }
+      if (isEmptyString(name, 'sendData')) {return;}
+      if (!ChannelManager.exists(name)) {
+        throw new Error (`Channel with name '${name}' does not exist`);
+        return;
+      }
+
+      // Validate data according to the format
+      validateData(data, channels[name].format);
     },
     listen() {},
     listenOnce() {},
@@ -96,9 +172,8 @@ const ChannelManager = (function() {
         throw new Error('.setFormat() function expects 2 arguments: channel name and data format.');
         return;
       }
-
       if (!ChannelManager.exists(name)) {
-        throw new Error (`Channel with name '${name}' does not exist`);
+        throw new Error (`Channel with name '${name}' does not exist.`);
         return;
       }
 
@@ -112,8 +187,16 @@ const ChannelManager = (function() {
           }
           break;
         case 'object':
+          if (Array.isArray(format)) {
+            throw new Error('Format object passed to .setFormat() cannot be array.');
+            return;
+          }
+          if (!format) {
+            throw new Error('Format object passed to .setFormat() cannot be null.');
+            return;
+          }
           if (Object.keys(format).length === 0) {
-            throw new Error('Format object, passed to .setFormat() cannot be empty');
+            throw new Error('Format object passed to .setFormat() cannot be empty.');
             return;
           }
 
@@ -136,7 +219,7 @@ const ChannelManager = (function() {
       if (!checkType(name, 'string', 'getFormat')) {return;}
       if (isEmptyString(name, 'getFormat')) {return;}
       if (!ChannelManager.exists(name)) {
-        throw new Error (`Channel with name '${name}' does not exist`);
+        throw new Error (`Channel with name '${name}' does not exist.`);
         return;
       }
 
