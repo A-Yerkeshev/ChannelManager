@@ -251,6 +251,7 @@ const ChannelManager = (function() {
 
       channels[name].tmpListeners = new Set(Array.from(channels[name].tmpListeners).concat(callbacks));
     },
+    unlisten(name, ...callbacks) {},
     setFormat(name, format) {
       // format can either be
       // 'ANY', 'STRING', 'NUMBER',

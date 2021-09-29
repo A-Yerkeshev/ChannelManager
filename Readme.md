@@ -78,7 +78,10 @@ Specifies, which callbacks need to be run when new data is sent to the channel. 
 ```
 
 * `ChannelManager.listenOnce( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`
-Works same way as `.listen()` method, but callbacks fire only once;
+Works same way as `.listen()` method, but callbacks fire only once.
+
+* `ChannelManager.unlisten( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`
+Stops specified functions from listening to the channel.
 
 * `ChannelManager.setFormat( <channel-name:string>, <format:keyword | object> )`
 Sets the format, in which data can be sent through the channel. Keyword can be:
@@ -101,7 +104,7 @@ Sets the format, in which data can be sent through the channel. Keyword can be:
  ```
 
  * `ChannelManager.getFormat( <channel-name:string> )`
- Outputs the data format of given channel. Output is keyword **string** or **object**.
+ Outputs the data format of given channel. Output is **keyword string** or **object**.
 
  * `ChannelManager.closeChannel( <channel-name:string> )`
  Closes the data channel.
