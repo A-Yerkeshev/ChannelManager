@@ -219,6 +219,7 @@ test("Listen", () => {
   expect(() => {CM.listen('test-channel', {})}).toThrow("Argument passed to .listen() function must be of 'function' type.");
   expect(() => {CM.listen('test-channel', null)}).toThrow("Argument passed to .listen() function must be of 'function' type.");
   expect(() => {CM.listen('test-channel', undefined)}).toThrow("Argument passed to .listen() function must be of 'function' type.");
+  expect(() => {CM.listen('test-channel', function callback1() {}, 3)}).toThrow("Argument passed to .listen() function must be of 'function' type.");
 
   const data = {
     value: true
@@ -236,4 +237,53 @@ test("Listen", () => {
   expect(callback1).toHaveBeenCalledTimes(2);
   expect(callback2).toHaveBeenCalled();
   expect(callback3).toHaveBeenCalled();
+
+  CM.closeChannel('test-channel');
+})
+
+test("Listen once", () => {
+  CM.openChannel('test-channel');
+
+  expect(() => {CM.listenOnce()}).toThrow(".listenOnce() function expects at least 2 arguments: channel name and callback.");
+  expect(() => {CM.listenOnce('non-existent-channel', function callback1() {})}).toThrow("Channel with name 'non-existent-channel' does not exist.");
+  expect(() => {CM.listenOnce('', function callback1() {})}).toThrow("Argument passed to .listenOnce() cannot be empty string.");
+
+  expect(() => {CM.listenOnce(1, function callback1() {})}).toThrow("Argument passed to .listenOnce() function must be of 'string' type.");
+  expect(() => {CM.listenOnce(true, function callback1() {})}).toThrow("Argument passed to .listenOnce() function must be of 'string' type.");
+  expect(() => {CM.listenOnce([1,2,3], function callback1() {})}).toThrow("Argument passed to .listenOnce() function must be of 'string' type.");
+  expect(() => {CM.listenOnce({}, function callback1() {})}).toThrow("Argument passed to .listenOnce() function must be of 'string' type.");
+  expect(() => {CM.listenOnce(function testFunc() {}, function callback1() {})}).toThrow("Argument passed to .listenOnce() function must be of 'string' type.");
+  expect(() => {CM.listenOnce(null, function callback1() {})}).toThrow("Argument passed to .listenOnce() function must be of 'string' type.");
+  expect(() => {CM.listenOnce(undefined, function callback1() {})}).toThrow("Argument passed to .listenOnce() function must be of 'string' type.");
+
+  expect(() => {CM.listenOnce('test-channel', 'string')}).toThrow("Argument passed to .listenOnce() function must be of 'function' type.");
+  expect(() => {CM.listenOnce('test-channel', 2)}).toThrow("Argument passed to .listenOnce() function must be of 'function' type.");
+  expect(() => {CM.listenOnce('test-channel', false)}).toThrow("Argument passed to .listenOnce() function must be of 'function' type.");
+  expect(() => {CM.listenOnce('test-channel', [1,2,3])}).toThrow("Argument passed to .listenOnce() function must be of 'function' type.");
+  expect(() => {CM.listenOnce('test-channel', {})}).toThrow("Argument passed to .listenOnce() function must be of 'function' type.");
+  expect(() => {CM.listenOnce('test-channel', null)}).toThrow("Argument passed to .listenOnce() function must be of 'function' type.");
+  expect(() => {CM.listenOnce('test-channel', undefined)}).toThrow("Argument passed to .listenOnce() function must be of 'function' type.");
+  expect(() => {CM.listenOnce('test-channel', function callback1() {}, 3)}).toThrow("Argument passed to .listenOnce() function must be of 'function' type.");
+
+  const data = {
+    value: true
+  }
+  const callback1 = jest.fn();
+  const callback2 = jest.fn();
+  const callback3 = jest.fn();
+
+  CM.listenOnce('test-channel', callback1);
+  CM.sendData('test-channel', data);
+  CM.sendData('test-channel', data);
+
+  expect(callback1).toHaveBeenCalledTimes(1);
+
+  CM.listenOnce('test-channel', callback2, callback3);
+  CM.sendData('test-channel', data);
+  CM.sendData('test-channel', data);
+
+  expect(callback2).toHaveBeenCalledTimes(1);
+  expect(callback3).toHaveBeenCalledTimes(1);
+
+  CM.closeChannel('test-channel');
 })

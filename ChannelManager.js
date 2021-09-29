@@ -233,7 +233,24 @@ const ChannelManager = (function() {
 
       channels[name].listeners = new Set(Array.from(channels[name].listeners).concat(callbacks));
     },
-    listenOnce() {},
+    listenOnce(name, ...callbacks) {
+      if (arguments.length < 2) {
+        throw new Error('.listenOnce() function expects at least 2 arguments: channel name and callback.');
+        return;
+      }
+      if (!checkType(name, 'string', 'listenOnce')) {return;}
+      if (isEmptyString(name, 'listenOnce')) {return;}
+      if (!ChannelManager.exists(name)) {
+        throw new Error (`Channel with name '${name}' does not exist.`);
+        return;
+      }
+
+      callbacks.forEach((callback) => {
+        if (!checkType(callback, 'function', 'listenOnce')) {return;}
+      })
+
+      channels[name].tmpListeners = new Set(Array.from(channels[name].tmpListeners).concat(callbacks));
+    },
     setFormat(name, format) {
       // format can either be
       // 'ANY', 'STRING', 'NUMBER',
