@@ -251,7 +251,29 @@ const ChannelManager = (function() {
 
       channels[name].tmpListeners = new Set(Array.from(channels[name].tmpListeners).concat(callbacks));
     },
-    unlisten(name, ...callbacks) {},
+    unlisten(name, ...callbacks) {
+      if (arguments.length < 2) {
+        throw new Error('.unlisten() function expects at least 2 arguments: channel name and callback.');
+        return;
+      }
+      if (!checkType(name, 'string', 'unlisten')) {return;}
+      if (isEmptyString(name, 'unlisten')) {return;}
+      if (!ChannelManager.exists(name)) {
+        throw new Error (`Channel with name '${name}' does not exist.`);
+        return;
+      }
+
+      callbacks.forEach((callback) => {
+        if (!checkType(callback, 'function', 'unlisten')) {return;}
+
+        if (channels[name].listeners.has(callback)) {
+          channels[name].listeners.delete(callback);
+        } else {
+          throw new Error(`Callback with name '${callback.name}' does not listen to channel '${name}'.`);
+          return;
+        }
+      })
+    },
     setFormat(name, format) {
       // format can either be
       // 'ANY', 'STRING', 'NUMBER',

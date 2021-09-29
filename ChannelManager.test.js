@@ -287,3 +287,41 @@ test("Listen once", () => {
 
   CM.closeChannel('test-channel');
 })
+
+test("Unlisten", () => {
+  CM.openChannel('test-channel');
+
+  expect(() => {CM.unlisten()}).toThrow(".unlisten() function expects at least 2 arguments: channel name and callback.");
+  expect(() => {CM.unlisten('non-existent-channel', function callback1() {})}).toThrow("Channel with name 'non-existent-channel' does not exist.");
+  expect(() => {CM.unlisten('', function callback1() {})}).toThrow("Argument passed to .unlisten() cannot be empty string.");
+
+  expect(() => {CM.unlisten(1, function callback1() {})}).toThrow("Argument passed to .unlisten() function must be of 'string' type.");
+  expect(() => {CM.unlisten(true, function callback1() {})}).toThrow("Argument passed to .unlisten() function must be of 'string' type.");
+  expect(() => {CM.unlisten([1,2,3], function callback1() {})}).toThrow("Argument passed to .unlisten() function must be of 'string' type.");
+  expect(() => {CM.unlisten({}, function callback1() {})}).toThrow("Argument passed to .unlisten() function must be of 'string' type.");
+  expect(() => {CM.unlisten(function testFunc() {}, function callback1() {})}).toThrow("Argument passed to .unlisten() function must be of 'string' type.");
+  expect(() => {CM.unlisten(null, function callback1() {})}).toThrow("Argument passed to .unlisten() function must be of 'string' type.");
+  expect(() => {CM.unlisten(undefined, function callback1() {})}).toThrow("Argument passed to .unlisten() function must be of 'string' type.");
+
+  expect(() => {CM.unlisten('test-channel', 'string')}).toThrow("Argument passed to .unlisten() function must be of 'function' type.");
+  expect(() => {CM.unlisten('test-channel', 2)}).toThrow("Argument passed to .unlisten() function must be of 'function' type.");
+  expect(() => {CM.unlisten('test-channel', false)}).toThrow("Argument passed to .unlisten() function must be of 'function' type.");
+  expect(() => {CM.unlisten('test-channel', [1,2,3])}).toThrow("Argument passed to .unlisten() function must be of 'function' type.");
+  expect(() => {CM.unlisten('test-channel', {})}).toThrow("Argument passed to .unlisten() function must be of 'function' type.");
+  expect(() => {CM.unlisten('test-channel', null)}).toThrow("Argument passed to .unlisten() function must be of 'function' type.");
+  expect(() => {CM.unlisten('test-channel', undefined)}).toThrow("Argument passed to .unlisten() function must be of 'function' type.");
+  expect(() => {CM.unlisten('test-channel', 3, function callback1() {})}).toThrow("Argument passed to .unlisten() function must be of 'function' type.");
+
+  const data = {
+    value: true
+  }
+  const callback1 = jest.fn();
+
+  CM.listen('test-channel', callback1);
+  CM.unlisten('test-channel', callback1);
+  CM.sendData('test-channel', data);
+
+  expect(callback1).not.toHaveBeenCalled();
+
+  CM.closeChannel('test-channel');
+})
