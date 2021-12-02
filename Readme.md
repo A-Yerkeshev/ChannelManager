@@ -15,15 +15,15 @@ For this example let's call the module that sends data **sender.js** and compone
 
 ### In sender.js:
 ```
-  import ChannelManager from <file-location> as CM // --In browser
+  import CM from <file-location> // --In browser
   const CM = require(<file-location>) // --In Node
 
-  CM.openChannel('channel-name');
-  CM.sendData('channel-name', <your-data>);
+  CM.open('channel-name');
+  CM.send('channel-name', <your-data>);
 ```
 ### In receiver.js:
 ```
-  import ChannelManager from <file-location> as CM // --In browser
+  import CM from <file-location> // --In browser
   const CM = require(<file-location>) // --In Node
 
   CM.listen('channel-name', (data) => {
@@ -37,13 +37,13 @@ Now, every time `sender.js` sends new data, the callback that was passed to `.li
 *Note that you do not need to run `.openChannel()` function if you send data to existing channel.
 
 ## Methods
-* `ChannelManager.openChannel( <channel-name:string> )`
+* `ChannelManager.open( <channel-name:string> )`
 Opens new channel. This function only needs to be run in first module. Has no effect when called again with same argument.
 
 * `ChannelManager.exists( <channel-name:string> )`
 Checks if channel with given name already exists. Output is **boolean**.
 
-* `ChannelManager.sendData( <channel-name:string>, <data>, <?data-headers:object>)`
+* `ChannelManager.send( <channel-name:string>, <data>, <?data-headers:object>)`
 Sends data to the channel. It is highly recommended that data format is agreed between developers beforehands.
 As third parameter, you can optionally mark your data with some object with information about the data. This might help receiver to decide how data should be processed.
 **Example:**
@@ -105,6 +105,22 @@ Sets the format, in which data can be sent through the channel. Keyword can be:
 
  * `ChannelManager.getFormat( <channel-name:string> )`
  Outputs the data format of given channel. Output is **keyword string** or **object**.
+
+ * `ChannelManager.request( <req-channel-name:string>, <res-channel-name:string> )`
+ Urges sender module to emit data to the channel. Before using this method, two channels need to be initialized: one that sends data and one that receives data emition requests. It returns data that can be then assigned to the variable.
+**Example:**
+```
+  CM.open('req-channel');
+  CM.open('res-channel');
+
+  // In sender
+  CM.listen('req-channel', () => {
+    CM.send('res-channel', true);
+  })
+
+  // In receiver
+  const response = CM.request('req-channel', 'res-channel');   // --response is equal to true
+```
 
  * `ChannelManager.closeChannel( <channel-name:string> )`
  Closes the data channel.

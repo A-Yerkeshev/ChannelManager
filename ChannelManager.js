@@ -159,9 +159,9 @@ const ChannelManager = (function() {
   }
 
   return {
-    openChannel(name) {
-      if (!checkType(name, 'string', 'openChannel')) {return;}
-      if (isEmptyString(name, 'openChannel')) {return;}
+    open(name) {
+      if (!checkType(name, 'string', 'open')) {return;}
+      if (isEmptyString(name, 'open')) {return;}
 
       if (!channels[name]) {
         channels[name] = {
@@ -173,9 +173,9 @@ const ChannelManager = (function() {
         }
       }
     },
-    closeChannel(name) {
-      if (!checkType(name, 'string', 'closeChannel')) {return;}
-      if (isEmptyString(name, 'closeChannel')) {return;}
+    close(name) {
+      if (!checkType(name, 'string', 'close')) {return;}
+      if (isEmptyString(name, 'close')) {return;}
       if (!ChannelManager.exists(name)) {
         throw new Error (`Channel with name '${name}' does not exist.`);
         return;
@@ -183,14 +183,14 @@ const ChannelManager = (function() {
 
       delete channels[name];
     },
-    sendData(name, data, headers={}) {
+    send(name, data, headers={}) {
       // headers - data headers object
       if (arguments.length < 2) {
         throw new Error('.sendData() function expects at least 2 arguments: channel name and data.');
         return;
       }
-      if (!checkType(name, 'string', 'sendData')) {return;}
-      if (isEmptyString(name, 'sendData')) {return;}
+      if (!checkType(name, 'string', 'send')) {return;}
+      if (isEmptyString(name, 'send')) {return;}
       if (!ChannelManager.exists(name)) {
         throw new Error (`Channel with name '${name}' does not exist.`);
         return;
@@ -343,12 +343,24 @@ const ChannelManager = (function() {
       if (isEmptyString(name, 'exists')) {return;}
 
       return name in channels;
+    },
+    request(name1, name2) {
+      if (!checkType(name1, 'string', 'request')) {return;}
+      if (isEmptyString(name1, 'request')) {return;}
+      if (!checkType(name2, 'string', 'request')) {return;}
+      if (isEmptyString(name2, 'request')) {return;}
+
+      this.send(name1, true);
+
+      this.listen(name2, (data) => {
+        return data;
+      })
     }
   }
 })();
 
 // FOR BROWSERS
-//export default ChannelManager;
+export default ChannelManager;
 
 // FOR NODE.JS
-module.exports = ChannelManager;
+//module.exports = ChannelManager;
