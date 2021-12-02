@@ -21,7 +21,7 @@ test("Open channel", () => {
   // Check if default data format is 'ANY'
   expect(CM.getFormat('test-channel')).toBe('ANY');
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
 });
 
 test("Check if channel exists", () => {
@@ -41,25 +41,25 @@ test("Check if channel exists", () => {
   expect(CM.exists('test-channel')).toBe(true);
   expect(CM.exists('non-existent-channel')).toBe(false);
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
 })
 
 test("Close channel", () => {
   CM.open('test-channel');
 
-  expect(() => {CM.closeChannel()}).toThrow("Argument passed to .closeChannel() function must be of 'string' type.");
-  expect(() => {CM.closeChannel(2)}).toThrow("Argument passed to .closeChannel() function must be of 'string' type.");
-  expect(() => {CM.closeChannel(true)}).toThrow("Argument passed to .closeChannel() function must be of 'string' type.");
-  expect(() => {CM.closeChannel([1,2,3])}).toThrow("Argument passed to .closeChannel() function must be of 'string' type.");
-  expect(() => {CM.closeChannel({})}).toThrow("Argument passed to .closeChannel() function must be of 'string' type.");
-  expect(() => {CM.closeChannel(function testFunc() {})}).toThrow("Argument passed to .closeChannel() function must be of 'string' type.");
-  expect(() => {CM.closeChannel(null)}).toThrow("Argument passed to .closeChannel() function must be of 'string' type.");
-  expect(() => {CM.closeChannel(undefined)}).toThrow("Argument passed to .closeChannel() function must be of 'string' type.");
+  expect(() => {CM.close()}).toThrow("Argument passed to .close() function must be of 'string' type.");
+  expect(() => {CM.close(2)}).toThrow("Argument passed to .close() function must be of 'string' type.");
+  expect(() => {CM.close(true)}).toThrow("Argument passed to .close() function must be of 'string' type.");
+  expect(() => {CM.close([1,2,3])}).toThrow("Argument passed to .close() function must be of 'string' type.");
+  expect(() => {CM.close({})}).toThrow("Argument passed to .close() function must be of 'string' type.");
+  expect(() => {CM.close(function testFunc() {})}).toThrow("Argument passed to .close() function must be of 'string' type.");
+  expect(() => {CM.close(null)}).toThrow("Argument passed to .close() function must be of 'string' type.");
+  expect(() => {CM.close(undefined)}).toThrow("Argument passed to .close() function must be of 'string' type.");
 
-  expect(() => {CM.closeChannel('')}).toThrow("Argument passed to .closeChannel() cannot be empty string.");
-  expect(() => {CM.closeChannel('non-existent-channel')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
+  expect(() => {CM.close('')}).toThrow("Argument passed to .close() cannot be empty string.");
+  expect(() => {CM.close('non-existent-channel')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
   expect(CM.exists('test-channel')).toBe(false);
 })
 
@@ -89,7 +89,7 @@ test("Get Format", () => {
   CM.setFormat('test-channel', format);
   expect(CM.getFormat('test-channel')).toBe(format);
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
 })
 
 test("Set format", () => {
@@ -134,7 +134,7 @@ test("Set format", () => {
 
   expect(() => {CM.setFormat('test-channel', invalidFormat)}).toThrow("Values of format object, passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword.");
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
 })
 
 test("Send data", () => {
@@ -196,7 +196,7 @@ test("Send data", () => {
   expect(() => {CM.send('test-channel', validData, function testFunc() {})}).toThrow("Data headers argument passed to .send() function must be an object.");
   expect(() => {CM.send('test-channel', validData, null)}).toThrow("Data headers argument passed to .send() function must be an object.");
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
 })
 
 test("Listen", () => {
@@ -240,7 +240,7 @@ test("Listen", () => {
   expect(callback2).toHaveBeenCalled();
   expect(callback3).toHaveBeenCalled();
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
 })
 
 test("Listen once", () => {
@@ -287,7 +287,7 @@ test("Listen once", () => {
   expect(callback2).toHaveBeenCalledTimes(1);
   expect(callback3).toHaveBeenCalledTimes(1);
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
 })
 
 test("Unlisten", () => {
@@ -325,7 +325,7 @@ test("Unlisten", () => {
 
   expect(callback1).not.toHaveBeenCalled();
 
-  CM.closeChannel('test-channel');
+  CM.close('test-channel');
 })
 
 test("Request", () => {
@@ -358,5 +358,9 @@ test("Request", () => {
   expect(() => {CM.request('req-channel', null)}).toThrow("Argument passed to .request() function must be of 'string' type.");
   expect(() => {CM.request('req-channel', undefined)}).toThrow("Argument passed to .request() function must be of 'string' type.");
 
-  expect(() => {CM.request('req-channel', 'res-channel')}).toBe(true);
+  const response = CM.request('req-channel', 'res-channel');
+  expect(response).toBe(true);
+
+  CM.close('req-channel');
+  CM.close('res-channel');
 })

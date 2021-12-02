@@ -186,7 +186,7 @@ const ChannelManager = (function() {
     send(name, data, headers={}) {
       // headers - data headers object
       if (arguments.length < 2) {
-        throw new Error('.sendData() function expects at least 2 arguments: channel name and data.');
+        throw new Error('.send() function expects at least 2 arguments: channel name and data.');
         return;
       }
       if (!checkType(name, 'string', 'send')) {return;}
@@ -198,12 +198,12 @@ const ChannelManager = (function() {
 
       // Validate data according to the format
       if (!validateData(data, channels[name].format)) {
-        throw new Error(`Data passed to .sendData() function does not match data format for '${name}' channel. Run .getFormat('${name}') to check the data format.`);
+        throw new Error(`Data passed to .send() function does not match data format for '${name}' channel. Run .getFormat('${name}') to check the data format.`);
         return;
       }
 
       if (typeof headers !== 'object' || Array.isArray(headers) || headers == null) {
-        throw new Error('Data headers argument passed to .sendData() function must be an object.');
+        throw new Error('Data headers argument passed to .send() function must be an object.');
         return;
       }
 
@@ -345,22 +345,37 @@ const ChannelManager = (function() {
       return name in channels;
     },
     request(name1, name2) {
+      if (arguments.length !== 2) {
+        throw new Error('.request() function expects 2 arguments: request channel name and response channel name.');
+        return;
+      }
       if (!checkType(name1, 'string', 'request')) {return;}
-      if (isEmptyString(name1, 'request')) {return;}
       if (!checkType(name2, 'string', 'request')) {return;}
+      if (isEmptyString(name1, 'request')) {return;}
       if (isEmptyString(name2, 'request')) {return;}
+      if (!ChannelManager.exists(name1)) {
+        throw new Error (`Channel with name '${name1}' does not exist.`);
+        return;
+      }
+      if (!ChannelManager.exists(name2)) {
+        throw new Error (`Channel with name '${name2}' does not exist.`);
+        return;
+      }
 
-      this.send(name1, true);
+      let result;
 
       this.listen(name2, (data) => {
-        return data;
+        result = data;
       })
+      this.send(name1, true);
+
+      return result;
     }
   }
 })();
 
 // FOR BROWSERS
-export default ChannelManager;
+//export default ChannelManager;
 
 // FOR NODE.JS
-//module.exports = ChannelManager;
+module.exports = ChannelManager;
