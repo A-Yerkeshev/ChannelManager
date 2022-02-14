@@ -344,30 +344,30 @@ const ChannelManager = (function() {
 
       return name in channels;
     },
-    request(name1, name2) {
+    request(reqChannel, resChannel) {
       if (arguments.length !== 2) {
         throw new Error('.request() function expects 2 arguments: request channel name and response channel name.');
         return;
       }
-      if (!checkType(name1, 'string', 'request')) {return;}
-      if (!checkType(name2, 'string', 'request')) {return;}
-      if (isEmptyString(name1, 'request')) {return;}
-      if (isEmptyString(name2, 'request')) {return;}
-      if (!ChannelManager.exists(name1)) {
-        throw new Error (`Channel with name '${name1}' does not exist.`);
+      if (!checkType(reqChannel, 'string', 'request')) {return;}
+      if (!checkType(resChannel, 'string', 'request')) {return;}
+      if (isEmptyString(reqChannel, 'request')) {return;}
+      if (isEmptyString(resChannel, 'request')) {return;}
+      if (!ChannelManager.exists(reqChannel)) {
+        throw new Error (`Channel with name '${reqChannel}' does not exist.`);
         return;
       }
-      if (!ChannelManager.exists(name2)) {
-        throw new Error (`Channel with name '${name2}' does not exist.`);
+      if (!ChannelManager.exists(resChannel)) {
+        throw new Error (`Channel with name '${resChannel}' does not exist.`);
         return;
       }
 
       let result;
 
-      this.listen(name2, (data) => {
+      this.listen(resChannel, (data) => {
         result = data;
       })
-      this.send(name1, true);
+      this.send(reqChannel, true);
 
       return result;
     }
