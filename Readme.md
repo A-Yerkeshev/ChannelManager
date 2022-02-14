@@ -52,7 +52,7 @@ Checks if channel with given name already exists.
 * `ChannelManager.send( <channel-name:string>, <data>, <?data-headers:object>, <?filter:keyword | object>, <?callback:function>) ==> array`\
 Sends data to the channel. Return value is thr array of results from all callbacks that were listening to this channel.\
 `data-headers` - optional object with data that might be used by receiver module;\
-`filter` - used to filter results array by given data type/object format. See [format](ChannelManager#format) for possible values;\
+`filter` - used to filter results array by given data type/object format. See [format](format) for possible values;\
 `callback` - optional function that will be passed results array as argument. Use when response from listening modules is asynchronous.
 
 **Example:**
