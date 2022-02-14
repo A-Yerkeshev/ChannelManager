@@ -61,11 +61,32 @@ const ChannelManager = (function() {
     }
   }
 
+  function validateFormat(format) {
+    switch (typeof format) {
+      case 'string':
+        formats.includes(format) ? true : false;
+        break;
+      case 'object':
+        for (let key in format) {
+          !validateFormat(format[key]) ? false
+        }
+
+        return true;
+        break;
+      default:
+        throw new Error("Argument passed to validateFormat() function must be 'string' or 'object'.")
+    }
+  }
+
   function validateData(data, format) {
     if (arguments.length !== 2) {
       throw new Error('validateData() function expects 2 arguments: data and data format.');
       return;
     }
+    if (!validateFormat(formatKeyword)) {
+      throw new Error(`Format passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
+      return
+    };
 
     switch (typeof format) {
       case 'string':
@@ -83,7 +104,6 @@ const ChannelManager = (function() {
         break;
       default:
         throw new Error(`Format passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
-        return;
     }
   }
 
@@ -92,6 +112,10 @@ const ChannelManager = (function() {
       throw new Error('validateByKeyword() function expects 2 arguments: data and format keyword.');
       return;
     }
+    if (!validateFormat(formatKeyword)) {
+      throw new Error(`Keyword passed to validateByKeyword() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT'.`);
+      return
+    };
 
     switch (formatKeyword) {
       case 'ANY':
@@ -126,16 +150,19 @@ const ChannelManager = (function() {
         break;
       default:
         throw new Error(`Keyword passed to validateByKeyword() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT'.`);
-        return;
     }
   }
 
   function runCallbacks(callbacks, data, headers) {
+    const results = [];
+
     callbacks.forEach((callback) => {
       if (!checkType(callback, 'function', 'runCallbacks')) {return;}
 
-      callback(data, headers);
+      results.push(callback(data, headers));
     })
+
+    return results;
   }
 
   function runCallbacksOnce(callbacks, data, headers, name) {
@@ -144,10 +171,12 @@ const ChannelManager = (function() {
       return;
     }
 
+    const results = [];
+
     callbacks.forEach((callback) => {
       if (!checkType(callback, 'function', 'runCallbacks')) {return;}
 
-      callback(data, headers);
+      resutls.push(callback(data, headers));
 
       if (channels[name].tmpListeners.has(callback)) {
         channels[name].tmpListeners.delete(callback);
@@ -155,6 +184,8 @@ const ChannelManager = (function() {
         throw new Error(`Callback with name '${callback.name}' does not listen to channel '${name}'.`);
         return;
       }
+
+      return results;
     })
   }
 
@@ -183,24 +214,26 @@ const ChannelManager = (function() {
 
       delete channels[name];
     },
-    send(name, data, headers={}) {
-      // headers - data headers object
+    send(name, data, headers={}, filter, callback) {
       if (arguments.length < 2) {
         throw new Error('.send() function expects at least 2 arguments: channel name and data.');
         return;
       }
+
       if (!checkType(name, 'string', 'send')) {return;}
       if (isEmptyString(name, 'send')) {return;}
+      if (!checkType(callback, 'function', 'send')) {return;}
+
       if (!ChannelManager.exists(name)) {
         throw new Error (`Channel with name '${name}' does not exist.`);
         return;
       }
 
       // Validate data according to the format
-      if (!validateData(data, channels[name].format)) {
-        throw new Error(`Data passed to .send() function does not match data format for '${name}' channel. Run .getFormat('${name}') to check the data format.`);
-        return;
-      }
+      // if (!validateData(data, channels[name].format)) {
+      //   throw new Error(`Data passed to .send() function does not match data format for '${name}' channel. Run .getFormat('${name}') to check the data format.`);
+      //   return;
+      // }
 
       if (typeof headers !== 'object' || Array.isArray(headers) || headers == null) {
         throw new Error('Data headers argument passed to .send() function must be an object.');
@@ -212,8 +245,10 @@ const ChannelManager = (function() {
       channel.dataHeaders = headers;
       channel.data = data;
 
-      runCallbacks(channel.listeners, data, headers);
-      runCallbacksOnce(channel.tmpListeners, data, headers, name);
+      const results = runCallbacks(channel.listeners, data, headers);
+      const resultsOnce = runCallbacksOnce(channel.tmpListeners, data, headers, name);
+
+      return [...results, ...resultsOnce];
     },
     listen(name, ...callbacks) {
       if (arguments.length < 2) {
