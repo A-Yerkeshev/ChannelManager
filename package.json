@@ -1,6 +1,6 @@
 {
   "name": "Channel-Manager",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Channel Manager is a JavaScript module, aimed to provide a standardized way of communication between different modules of the app. It suits apps that are build using Pub-Sub pattern.",
   "main": "ChannelManager.js",
   "scripts": {

@@ -19,7 +19,7 @@ test("Open channel", () => {
   expect(CM.exists('test-channel')).toBe(true);
 
   // Check if default data format is 'ANY'
-  expect(CM.getFormat('test-channel')).toBe('ANY');
+  //expect(CM.getFormat('test-channel')).toBe('ANY');
 
   CM.close('test-channel');
 });
@@ -63,79 +63,79 @@ test("Close channel", () => {
   expect(CM.exists('test-channel')).toBe(false);
 })
 
-test("Get Format", () => {
-  CM.open('test-channel');
+// test("Get Format", () => {
+//   CM.open('test-channel');
 
-  expect(() => {CM.getFormat()}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat(2)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat(true)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat([1,2,3])}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat({})}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat(function testFunc() {})}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat(null)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat(undefined)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat(NaN)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
-  expect(() => {CM.getFormat('')}).toThrow("Argument passed to .getFormat() cannot be empty string.");
-  expect(() => {CM.getFormat('non-existent-channel')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
+//   expect(() => {CM.getFormat()}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat(2)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat(true)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat([1,2,3])}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat({})}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat(function testFunc() {})}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat(null)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat(undefined)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat(NaN)}).toThrow("Argument passed to .getFormat() function must be of 'string' type.");
+//   expect(() => {CM.getFormat('')}).toThrow("Argument passed to .getFormat() cannot be empty string.");
+//   expect(() => {CM.getFormat('non-existent-channel')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
 
-  expect(CM.getFormat('test-channel')).toBe('ANY');
+//   expect(CM.getFormat('test-channel')).toBe('ANY');
 
-  const format = {
-    width: 'NUMBER',
-    height: 'NUMBER',
-    color: 'STRING'
-  }
+//   const format = {
+//     width: 'NUMBER',
+//     height: 'NUMBER',
+//     color: 'STRING'
+//   }
 
-  CM.setFormat('test-channel', format);
-  expect(CM.getFormat('test-channel')).toBe(format);
+//   CM.setFormat('test-channel', format);
+//   expect(CM.getFormat('test-channel')).toBe(format);
 
-  CM.close('test-channel');
-})
+//   CM.close('test-channel');
+// })
 
-test("Set format", () => {
-  CM.open('test-channel');
+// test("Set format", () => {
+//   CM.open('test-channel');
 
-  expect(() => {CM.setFormat()}).toThrow(".setFormat() function expects 2 arguments: channel name and data format.");
-  expect(() => {CM.setFormat('non-existent-channel', 'ANY')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
-  expect(() => {CM.setFormat('', 'ANY')}).toThrow("Argument passed to .setFormat() cannot be empty string.");
+//   expect(() => {CM.setFormat()}).toThrow(".setFormat() function expects 2 arguments: channel name and data format.");
+//   expect(() => {CM.setFormat('non-existent-channel', 'ANY')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
+//   expect(() => {CM.setFormat('', 'ANY')}).toThrow("Argument passed to .setFormat() cannot be empty string.");
 
-  expect(() => {CM.setFormat(1, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
-  expect(() => {CM.setFormat(true, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
-  expect(() => {CM.setFormat([1,2,3], 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
-  expect(() => {CM.setFormat({}, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
-  expect(() => {CM.setFormat(function testFunc() {}, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
-  expect(() => {CM.setFormat(null, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
-  expect(() => {CM.setFormat(undefined, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
+//   expect(() => {CM.setFormat(1, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
+//   expect(() => {CM.setFormat(true, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
+//   expect(() => {CM.setFormat([1,2,3], 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
+//   expect(() => {CM.setFormat({}, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
+//   expect(() => {CM.setFormat(function testFunc() {}, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
+//   expect(() => {CM.setFormat(null, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
+//   expect(() => {CM.setFormat(undefined, 'ANY')}).toThrow("Argument passed to .setFormat() function must be of 'string' type.");
 
-  expect(() => {CM.setFormat('test-channel', 'wrong-string')}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
-  expect(() => {CM.setFormat('test-channel', 1)}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
-  expect(() => {CM.setFormat('test-channel', true)}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
-  expect(() => {CM.setFormat('test-channel', [1,2,3])}).toThrow("Format object passed to .setFormat() cannot be array.");
-  expect(() => {CM.setFormat('test-channel', {})}).toThrow("Format object passed to .setFormat() cannot be empty.");
-  expect(() => {CM.setFormat('test-channel', function testFunc() {})}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
-  expect(() => {CM.setFormat('test-channel', null)}).toThrow("Format object passed to .setFormat() cannot be null.");
-  expect(() => {CM.setFormat('test-channel', undefined)}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
+//   expect(() => {CM.setFormat('test-channel', 'wrong-string')}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
+//   expect(() => {CM.setFormat('test-channel', 1)}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
+//   expect(() => {CM.setFormat('test-channel', true)}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
+//   expect(() => {CM.setFormat('test-channel', [1,2,3])}).toThrow("Format object passed to .setFormat() cannot be array.");
+//   expect(() => {CM.setFormat('test-channel', {})}).toThrow("Format object passed to .setFormat() cannot be empty.");
+//   expect(() => {CM.setFormat('test-channel', function testFunc() {})}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
+//   expect(() => {CM.setFormat('test-channel', null)}).toThrow("Format object passed to .setFormat() cannot be null.");
+//   expect(() => {CM.setFormat('test-channel', undefined)}).toThrow("Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.");
 
-  CM.setFormat('test-channel', 'STRING');
-  expect(CM.getFormat('test-channel')).toBe('STRING');
+//   CM.setFormat('test-channel', 'STRING');
+//   expect(CM.getFormat('test-channel')).toBe('STRING');
 
-  const format = {
-    width: 'NUMBER',
-    height: 'NUMBER',
-    color: 'STRING'
-  }
+//   const format = {
+//     width: 'NUMBER',
+//     height: 'NUMBER',
+//     color: 'STRING'
+//   }
 
-  CM.setFormat('test-channel', format);
-  expect(CM.getFormat('test-channel')).toBe(format);
+//   CM.setFormat('test-channel', format);
+//   expect(CM.getFormat('test-channel')).toBe(format);
 
-  const invalidFormat = {
-    width: 589
-  }
+//   const invalidFormat = {
+//     width: 589
+//   }
 
-  expect(() => {CM.setFormat('test-channel', invalidFormat)}).toThrow("Values of format object, passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword.");
+//   expect(() => {CM.setFormat('test-channel', invalidFormat)}).toThrow("Values of format object, passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword.");
 
-  CM.close('test-channel');
-})
+//   CM.close('test-channel');
+// })
 
 test("Send data", () => {
   CM.open('test-channel');
@@ -152,24 +152,24 @@ test("Send data", () => {
   expect(() => {CM.send(null, 'data')}).toThrow("Argument passed to .send() function must be of 'string' type.");
   expect(() => {CM.send(undefined, 'data')}).toThrow("Argument passed to .send() function must be of 'string' type.");
 
-  CM.setFormat('test-channel', 'NUMBER');
-  expect(CM.send('test-channel', 1000)).toBe(undefined);
+  // CM.setFormat('test-channel', 'NUMBER');
+  // expect(CM.send('test-channel', 1000)).toBe(undefined);
 
-  expect(() => {CM.send('test-channel', 'data')}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
-  expect(() => {CM.send('test-channel', false)}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
-  expect(() => {CM.send('test-channel', [1,2,3])}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
-  expect(() => {CM.send('test-channel', {})}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
-  expect(() => {CM.send('test-channel', function testFunc() {})}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
-  expect(() => {CM.send('test-channel', null)}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
-  expect(() => {CM.send('test-channel', undefined)}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
+  // expect(() => {CM.send('test-channel', 'data')}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
+  // expect(() => {CM.send('test-channel', false)}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
+  // expect(() => {CM.send('test-channel', [1,2,3])}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
+  // expect(() => {CM.send('test-channel', {})}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
+  // expect(() => {CM.send('test-channel', function testFunc() {})}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
+  // expect(() => {CM.send('test-channel', null)}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
+  // expect(() => {CM.send('test-channel', undefined)}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
 
-  const format = {
-    width: 'NUMBER',
-    length: 'NUMBER',
-    color: 'STRING'
-  }
+  // const format = {
+  //   width: 'NUMBER',
+  //   length: 'NUMBER',
+  //   color: 'STRING'
+  // }
 
-  CM.setFormat('test-channel', format);
+  // CM.setFormat('test-channel', format);
 
   const validData = {
     width: 15,
@@ -184,7 +184,7 @@ test("Send data", () => {
 
   expect(CM.send('test-channel', validData)).toBe(undefined);
 
-  expect(() => {CM.send('test-channel', invalidData)}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
+  // expect(() => {CM.send('test-channel', invalidData)}).toThrow("Data passed to .send() function does not match data format for 'test-channel' channel. Run .getFormat('test-channel') to check the data format.");
 
   const headers = {object: 'box'}
 
@@ -328,39 +328,39 @@ test("Unlisten", () => {
   CM.close('test-channel');
 })
 
-test("Request", () => {
-  CM.open('req-channel');
-  CM.open('res-channel');
+// test("Request", () => {
+//   CM.open('req-channel');
+//   CM.open('res-channel');
 
-  CM.listen('req-channel', () => {
-    CM.send('res-channel', true);
-  })
+//   CM.listen('req-channel', () => {
+//     CM.send('res-channel', true);
+//   })
 
-  expect(() => {CM.request()}).toThrow(".request() function expects 2 arguments: request channel name and response channel name.");
-  expect(() => {CM.request('non-existent-channel')}).toThrow(".request() function expects 2 arguments: request channel name and response channel name.");
-  expect(() => {CM.request('non-existent-channel', 'res-channel')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
-  expect(() => {CM.request('', 'res-channel')}).toThrow("Argument passed to .request() cannot be empty string.");
-  expect(() => {CM.request('req-channel', '')}).toThrow("Argument passed to .request() cannot be empty string.");
+//   expect(() => {CM.request()}).toThrow(".request() function expects 2 arguments: request channel name and response channel name.");
+//   expect(() => {CM.request('non-existent-channel')}).toThrow(".request() function expects 2 arguments: request channel name and response channel name.");
+//   expect(() => {CM.request('non-existent-channel', 'res-channel')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
+//   expect(() => {CM.request('', 'res-channel')}).toThrow("Argument passed to .request() cannot be empty string.");
+//   expect(() => {CM.request('req-channel', '')}).toThrow("Argument passed to .request() cannot be empty string.");
 
-  expect(() => {CM.request(1, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request(true, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request([1,2,3], 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request({}, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request(function testFunc() {}, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request(null, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request(undefined, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request(1, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request(true, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request([1,2,3], 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request({}, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request(function testFunc() {}, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request(null, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request(undefined, 'res-channel')}).toThrow("Argument passed to .request() function must be of 'string' type.");
 
-  expect(() => {CM.request('req-channel', 1)}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request('req-channel', true)}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request('req-channel', [1,2,3])}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request('req-channel', {})}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request('req-channel', function testFunc() {})}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request('req-channel', null)}).toThrow("Argument passed to .request() function must be of 'string' type.");
-  expect(() => {CM.request('req-channel', undefined)}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request('req-channel', 1)}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request('req-channel', true)}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request('req-channel', [1,2,3])}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request('req-channel', {})}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request('req-channel', function testFunc() {})}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request('req-channel', null)}).toThrow("Argument passed to .request() function must be of 'string' type.");
+//   expect(() => {CM.request('req-channel', undefined)}).toThrow("Argument passed to .request() function must be of 'string' type.");
 
-  const response = CM.request('req-channel', 'res-channel');
-  expect(response).toBe(true);
+//   const response = CM.request('req-channel', 'res-channel');
+//   expect(response).toBe(true);
 
-  CM.close('req-channel');
-  CM.close('res-channel');
-})
+//   CM.close('req-channel');
+//   CM.close('res-channel');
+// })

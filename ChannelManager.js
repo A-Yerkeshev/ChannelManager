@@ -274,103 +274,103 @@ const ChannelManager = (function() {
         }
       })
     },
-    setFormat(name, format) {
-      // format can either be
-      // 'ANY', 'STRING', 'NUMBER',
-      // 'BOOLEAN', 'UNDEFINED', 'ARRAY',
-      // 'OBJECT', 'FUNCTION', 'BIGINT' or object
-      if (arguments.length !== 2) {
-        throw new Error('.setFormat() function expects 2 arguments: channel name and data format.');
-        return;
-      }
-      if (!checkType(name, 'string', 'setFormat')) {return;}
-      if (isEmptyString(name, 'setFormat')) {return;}
-      if (!ChannelManager.exists(name)) {
-        throw new Error (`Channel with name '${name}' does not exist.`);
-        return;
-      }
+    // setFormat(name, format) {
+    //   // format can either be
+    //   // 'ANY', 'STRING', 'NUMBER',
+    //   // 'BOOLEAN', 'UNDEFINED', 'ARRAY',
+    //   // 'OBJECT', 'FUNCTION', 'BIGINT' or object
+    //   if (arguments.length !== 2) {
+    //     throw new Error('.setFormat() function expects 2 arguments: channel name and data format.');
+    //     return;
+    //   }
+    //   if (!checkType(name, 'string', 'setFormat')) {return;}
+    //   if (isEmptyString(name, 'setFormat')) {return;}
+    //   if (!ChannelManager.exists(name)) {
+    //     throw new Error (`Channel with name '${name}' does not exist.`);
+    //     return;
+    //   }
 
-      switch (typeof format) {
-        case 'string':
-          if (!formats.includes(format)) {
-            throw new Error(`Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
-            return;
-          } else {
-            channels[name].format = format;
-          }
-          break;
-        case 'object':
-          if (Array.isArray(format)) {
-            throw new Error('Format object passed to .setFormat() cannot be array.');
-            return;
-          }
-          if (!format) {
-            throw new Error('Format object passed to .setFormat() cannot be null.');
-            return;
-          }
-          if (Object.keys(format).length === 0) {
-            throw new Error('Format object passed to .setFormat() cannot be empty.');
-            return;
-          }
+    //   switch (typeof format) {
+    //     case 'string':
+    //       if (!formats.includes(format)) {
+    //         throw new Error(`Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
+    //         return;
+    //       } else {
+    //         channels[name].format = format;
+    //       }
+    //       break;
+    //     case 'object':
+    //       if (Array.isArray(format)) {
+    //         throw new Error('Format object passed to .setFormat() cannot be array.');
+    //         return;
+    //       }
+    //       if (!format) {
+    //         throw new Error('Format object passed to .setFormat() cannot be null.');
+    //         return;
+    //       }
+    //       if (Object.keys(format).length === 0) {
+    //         throw new Error('Format object passed to .setFormat() cannot be empty.');
+    //         return;
+    //       }
 
-          // Enumerate through object properties and check if values are valid keywords
-          for (let key in format) {
-            if (!formats.includes(format[key])) {
-              throw new Error(`Values of format object, passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword.`);
-              return;
-            }
-          }
+    //       // Enumerate through object properties and check if values are valid keywords
+    //       for (let key in format) {
+    //         if (!formats.includes(format[key])) {
+    //           throw new Error(`Values of format object, passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword.`);
+    //           return;
+    //         }
+    //       }
 
-          channels[name].format = format;
-          break;
-        default:
-          throw new Error(`Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
-          return;
-      }
-    },
-    getFormat(name) {
-      if (!checkType(name, 'string', 'getFormat')) {return;}
-      if (isEmptyString(name, 'getFormat')) {return;}
-      if (!ChannelManager.exists(name)) {
-        throw new Error (`Channel with name '${name}' does not exist.`);
-        return;
-      }
+    //       channels[name].format = format;
+    //       break;
+    //     default:
+    //       throw new Error(`Format passed to .setFormat() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
+    //       return;
+    //   }
+    // },
+    // getFormat(name) {
+    //   if (!checkType(name, 'string', 'getFormat')) {return;}
+    //   if (isEmptyString(name, 'getFormat')) {return;}
+    //   if (!ChannelManager.exists(name)) {
+    //     throw new Error (`Channel with name '${name}' does not exist.`);
+    //     return;
+    //   }
 
-      return channels[name].format;
-    },
+    //   return channels[name].format;
+    // },
     exists(name) {
       if (!checkType(name, 'string', 'exists')) {return;}
       if (isEmptyString(name, 'exists')) {return;}
 
       return name in channels;
     },
-    request(reqChannel, resChannel) {
-      if (arguments.length !== 2) {
-        throw new Error('.request() function expects 2 arguments: request channel name and response channel name.');
-        return;
-      }
-      if (!checkType(reqChannel, 'string', 'request')) {return;}
-      if (!checkType(resChannel, 'string', 'request')) {return;}
-      if (isEmptyString(reqChannel, 'request')) {return;}
-      if (isEmptyString(resChannel, 'request')) {return;}
-      if (!ChannelManager.exists(reqChannel)) {
-        throw new Error (`Channel with name '${reqChannel}' does not exist.`);
-        return;
-      }
-      if (!ChannelManager.exists(resChannel)) {
-        throw new Error (`Channel with name '${resChannel}' does not exist.`);
-        return;
-      }
+    // request(reqChannel, resChannel) {
+    //   if (arguments.length !== 2) {
+    //     throw new Error('.request() function expects 2 arguments: request channel name and response channel name.');
+    //     return;
+    //   }
+    //   if (!checkType(reqChannel, 'string', 'request')) {return;}
+    //   if (!checkType(resChannel, 'string', 'request')) {return;}
+    //   if (isEmptyString(reqChannel, 'request')) {return;}
+    //   if (isEmptyString(resChannel, 'request')) {return;}
+    //   if (!ChannelManager.exists(reqChannel)) {
+    //     throw new Error (`Channel with name '${reqChannel}' does not exist.`);
+    //     return;
+    //   }
+    //   if (!ChannelManager.exists(resChannel)) {
+    //     throw new Error (`Channel with name '${resChannel}' does not exist.`);
+    //     return;
+    //   }
 
-      let result;
+    //   let result;
 
-      this.listen(resChannel, (data) => {
-        result = data;
-      })
-      this.send(reqChannel, true);
+    //   this.listen(resChannel, (data) => {
+    //     result = data;
+    //   })
+    //   this.send(reqChannel, true);
 
-      return result;
-    }
+    //   return result;
+    // }
   }
 })();
 
