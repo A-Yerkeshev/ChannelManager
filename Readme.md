@@ -43,16 +43,16 @@ Now, every time `sender.js` sends new data, the callback that was passed to `.li
 
 ## Methods
 
-* `ChannelManager.open( <channel-name:string> ) ==> channel object`
+* `ChannelManager.open( <channel-name:string> ) ==> channel object`\
 Opens new channel. This function only needs to be run in first module. Has no effect when called again with same argument.
 
-* `ChannelManager.exists( <channel-name:string> ) ==> boolean`
+* `ChannelManager.exists( <channel-name:string> ) ==> boolean`\
 Checks if channel with given name already exists.
 
-* `ChannelManager.send( <channel-name:string>, <data>, <?data-headers:object>, <?filter:keyword | object>, <?callback:function>) ==> array`
-Sends data to the channel. Return value is thr array of results from all callbacks that were listening to this channel.
-`data-headers` - optional object with data that might be used by receiver module;
-`filter` - used to filter results array by given data type/object format. See [format](ChannelManager#format) for possible values;
+* `ChannelManager.send( <channel-name:string>, <data>, <?data-headers:object>, <?filter:keyword | object>, <?callback:function>) ==> array`\
+Sends data to the channel. Return value is thr array of results from all callbacks that were listening to this channel.\
+`data-headers` - optional object with data that might be used by receiver module;\
+`filter` - used to filter results array by given data type/object format. See [format](ChannelManager#format) for possible values;\
 `callback` - optional function that will be passed results array as argument. Use when response from listening modules is asynchronous.
 
 **Example:**
@@ -71,7 +71,7 @@ Sends data to the channel. Return value is thr array of results from all callbac
   const transport = CM.send('zoo', headers, filter)[0];
 ```
 
-* `ChannelManager.listen( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`
+* `ChannelManager.listen( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`\
 Specifies, which callbacks need to be run when new data is sent to the channel. Each callback function will receive a `data` argument and `data-headers` object as second optional argument.
 **Example:**
 ```
@@ -86,13 +86,13 @@ Specifies, which callbacks need to be run when new data is sent to the channel. 
   CM.listen('zoo', callback);
 ```
 
-* `ChannelManager.listenOnce( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`
+* `ChannelManager.listenOnce( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`\
 Works same way as `.listen()` method, but callbacks fire only once.
 
-* `ChannelManager.unlisten( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`
+* `ChannelManager.unlisten( <channel-name:string>, <callback1:function>, ...<callbackN:function> )`\
 Stops specified functions from listening to the channel.
 
-* `ChannelManager.closeChannel( <channel-name:string> )`
+* `ChannelManager.closeChannel( <channel-name:string> )`\
  Closes the data channel.
 
 ###Format
