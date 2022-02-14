@@ -95,7 +95,7 @@ Stops specified functions from listening to the channel.
 * `ChannelManager.closeChannel( <channel-name:string> )`\
  Closes the data channel.
 
-###Format
+### Format
 
 Format can be either a keyword, either object. Keyword can be:
 `'ANY'`,
