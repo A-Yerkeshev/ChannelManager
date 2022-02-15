@@ -9,46 +9,46 @@ const ChannelManager = (function() {
   function checkType(input, type) {
     switch (type) {
       case 'string':
-        typeof input === 'string' ? true : false;
+        return (typeof input === 'string' ? true : false);
         break;
       case 'number':
-        typeof input === 'number' ? true : false;
+        return (typeof input === 'number' ? true : false);
         break;
       case 'boolean':
-        typeof input === 'boolean' ? true : false;
+        return (typeof input === 'boolean' ? true : false);
         break;
       case 'object':
-        (typeof input === 'object' && input !== null) ? true : false;
+        return ((typeof input === 'object' && input !== null) ? true : false);
         break;
       case 'function':
-        typeof input === 'function' ? true : false;
+        return (typeof input === 'function' ? true : false);
         break;
       case 'array':
-        typeof Array.isArray(input) ? true : false;
+        return (typeof Array.isArray(input) ? true : false);
         break;
       case 'null':
-        input === null ? true : false;
+        return (input === null ? true : false);
         break;
       case 'undefined':
-        typeof input === 'undefined' ? true : false;
+        return (typeof input === 'undefined' ? true : false);
         break;
       case 'bigint':
-        typeof input === 'bigint' ? true : false;
+        return (typeof input === 'bigint' ? true : false);
         break;
       case 'symbol':
-        typeof input === 'symbol' ? true : false;
+        return (typeof input === 'symbol' ? true : false);
         break;
       default:
         throw new Error("Second argument passed to checkType() function must be 'string', 'number', 'boolean', 'object', 'function', 'array', 'null', 'undefined', 'bigint' or 'symbol'.");
     }
   }
 
-  function argumentTypeError(type, func) {
+  function argumentTypeError(func, type) {
     throw new Error(`Argument passed to ${func}() function must be of '${type}' type.`)
   }
 
   function isEmptyString(string) {
-    string === '' ? true : false;
+    return (string === '' ? true : false);
   }
 
   function emptyStringError(func) {
@@ -79,10 +79,10 @@ const ChannelManager = (function() {
     }
   }
 
-  // Fuction that confirms that format is a valid keyword
+  // Fuction that confirms that provided argument is a valid keyword
   // Format keyword is case insensitive
   function validateKeyword(keyword) {
-    return formats.includes(format.toUpperCase()) ? true : false;
+    return (formats.includes(keyword.toUpperCase()) ? true : false);
   }
 
   function invalidFormatError(func) {
@@ -128,7 +128,7 @@ const ChannelManager = (function() {
       throw new Error('validateByKeyword() function expects 2 arguments: data and format keyword.');
       return;
     }
-    if (!validateFormat(formatKeyword)) {
+    if (!validateKeyword(formatKeyword)) {
       invalidKeywordError('validateByKeyword');
       return;
     };
@@ -207,12 +207,17 @@ const ChannelManager = (function() {
 
   return {
     open(name) {
-      if (!checkType(name, 'string', 'open')) {return;}
-      if (isEmptyString(name, 'open')) {return;}
+      if (!checkType(name, 'string')) {
+        argumentTypeError('open', 'string');
+        return;
+      }
+      if (isEmptyString(name)) {
+        emptyStringError('open');
+        return;
+      }
 
       if (!channels[name]) {
         channels[name] = {
-          format: 'ANY',
           dataHeaders: null,
           data: null,
           listeners: new Set(),

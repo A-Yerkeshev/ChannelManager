@@ -11,29 +11,29 @@ afterEach(() => {
 })
 
 test("Validate input for .open()", () => {
-  expect(() => {CM.open()}).toThrow("Argument passed to .open() function must be of 'string' type.");
-  expect(() => {CM.open(2)}).toThrow("Argument passed to .open() function must be of 'string' type.");
-  expect(() => {CM.open(true)}).toThrow("Argument passed to .open() function must be of 'string' type.");
-  expect(() => {CM.open([1,2,3])}).toThrow("Argument passed to .open() function must be of 'string' type.");
-  expect(() => {CM.open({})}).toThrow("Argument passed to .open() function must be of 'string' type.");
-  expect(() => {CM.open(function testFunc() {})}).toThrow("Argument passed to .open() function must be of 'string' type.");
-  expect(() => {CM.open(null)}).toThrow("Argument passed to .open() function must be of 'string' type.");
-  expect(() => {CM.open(undefined)}).toThrow("Argument passed to .open() function must be of 'string' type.");
+  expect(() => {CM.open()}).toThrow("Argument passed to open() function must be of 'string' type.");
+  expect(() => {CM.open(2)}).toThrow("Argument passed to open() function must be of 'string' type.");
+  expect(() => {CM.open(true)}).toThrow("Argument passed to open() function must be of 'string' type.");
+  expect(() => {CM.open([1,2,3])}).toThrow("Argument passed to open() function must be of 'string' type.");
+  expect(() => {CM.open({})}).toThrow("Argument passed to open() function must be of 'string' type.");
+  expect(() => {CM.open(function testFunc() {})}).toThrow("Argument passed to open() function must be of 'string' type.");
+  expect(() => {CM.open(null)}).toThrow("Argument passed to open() function must be of 'string' type.");
+  expect(() => {CM.open(undefined)}).toThrow("Argument passed to open() function must be of 'string' type.");
 
-  expect(() => {CM.open('')}).toThrow("Argument passed to .open() cannot be empty string.");
+  expect(() => {CM.open('')}).toThrow("Argument passed to open() function cannot be empty string.");
 })
 
 test("Validate input for .exists()", () => {
-  expect(() => {CM.exists()}).toThrow("Argument passed to .exists() function must be of 'string' type.");
-  expect(() => {CM.exists(2)}).toThrow("Argument passed to .exists() function must be of 'string' type.");
-  expect(() => {CM.exists(true)}).toThrow("Argument passed to .exists() function must be of 'string' type.");
-  expect(() => {CM.exists([1,2,3])}).toThrow("Argument passed to .exists() function must be of 'string' type.");
-  expect(() => {CM.exists({})}).toThrow("Argument passed to .exists() function must be of 'string' type.");
-  expect(() => {CM.exists(function testFunc() {})}).toThrow("Argument passed to .exists() function must be of 'string' type.");
-  expect(() => {CM.exists(null)}).toThrow("Argument passed to .exists() function must be of 'string' type.");
-  expect(() => {CM.exists(undefined)}).toThrow("Argument passed to .exists() function must be of 'string' type.");
+  expect(() => {CM.exists()}).toThrow("Argument passed to exists() function must be of 'string' type.");
+  expect(() => {CM.exists(2)}).toThrow("Argument passed to exists() function must be of 'string' type.");
+  expect(() => {CM.exists(true)}).toThrow("Argument passed to exists() function must be of 'string' type.");
+  expect(() => {CM.exists([1,2,3])}).toThrow("Argument passed to exists() function must be of 'string' type.");
+  expect(() => {CM.exists({})}).toThrow("Argument passed to exists() function must be of 'string' type.");
+  expect(() => {CM.exists(function testFunc() {})}).toThrow("Argument passed to exists() function must be of 'string' type.");
+  expect(() => {CM.exists(null)}).toThrow("Argument passed to exists() function must be of 'string' type.");
+  expect(() => {CM.exists(undefined)}).toThrow("Argument passed to exists() function must be of 'string' type.");
 
-  expect(() => {CM.exists('')}).toThrow("Argument passed to .exists() cannot be empty string.");
+  expect(() => {CM.exists('')}).toThrow("Argument passed to exists() function cannot be empty string.");
 })
 
 test("Confirm that opened channel exists", () => {
@@ -45,16 +45,16 @@ test("Confirm that non-opened channel does not exist", () => {
 })
 
 test("Validate input for .close()", () => {
-  expect(() => {CM.close()}).toThrow("Argument passed to .close() function must be of 'string' type.");
-  expect(() => {CM.close(2)}).toThrow("Argument passed to .close() function must be of 'string' type.");
-  expect(() => {CM.close(true)}).toThrow("Argument passed to .close() function must be of 'string' type.");
-  expect(() => {CM.close([1,2,3])}).toThrow("Argument passed to .close() function must be of 'string' type.");
-  expect(() => {CM.close({})}).toThrow("Argument passed to .close() function must be of 'string' type.");
-  expect(() => {CM.close(function testFunc() {})}).toThrow("Argument passed to .close() function must be of 'string' type.");
-  expect(() => {CM.close(null)}).toThrow("Argument passed to .close() function must be of 'string' type.");
-  expect(() => {CM.close(undefined)}).toThrow("Argument passed to .close() function must be of 'string' type.");
+  expect(() => {CM.close()}).toThrow("Argument passed to close() function must be of 'string' type.");
+  expect(() => {CM.close(2)}).toThrow("Argument passed to close() function must be of 'string' type.");
+  expect(() => {CM.close(true)}).toThrow("Argument passed to close() function must be of 'string' type.");
+  expect(() => {CM.close([1,2,3])}).toThrow("Argument passed to close() function must be of 'string' type.");
+  expect(() => {CM.close({})}).toThrow("Argument passed to close() function must be of 'string' type.");
+  expect(() => {CM.close(function testFunc() {})}).toThrow("Argument passed to close() function must be of 'string' type.");
+  expect(() => {CM.close(null)}).toThrow("Argument passed to close() function must be of 'string' type.");
+  expect(() => {CM.close(undefined)}).toThrow("Argument passed to close() function must be of 'string' type.");
 
-  expect(() => {CM.close('')}).toThrow("Argument passed to .close() cannot be empty string.");
+  expect(() => {CM.close('')}).toThrow("Argument passed to close() function cannot be empty string.");
   expect(() => {CM.close('non-existent-channel')}).toThrow("Channel with name 'non-existent-channel' does not exist.");
 })
 
