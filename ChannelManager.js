@@ -238,8 +238,14 @@ const ChannelManager = (function() {
       return name in channels;
     },
     close(name) {
-      if (!checkType(name, 'string', 'close')) {return;}
-      if (isEmptyString(name, 'close')) {return;}
+      if (!checkType(name, 'string')) {
+        argumentTypeError('close', 'string');
+        return;
+      }
+      if (isEmptyString(name)) {
+        emptyStringError('close');
+        return;
+      }
       if (!ChannelManager.exists(name)) {
         throw new Error (`Channel with name '${name}' does not exist.`);
         return;
