@@ -7,7 +7,7 @@ const ChannelManager = (function() {
   // Function that checks type of the input
   // type --- 'string', 'number', 'boolean', 'object', 'function', 'array', 'null', 'undefined', 'bigint', 'symbol'
   function checkType(input, type) {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'string':
         return (typeof input === 'string' ? true : false);
         break;
@@ -18,7 +18,7 @@ const ChannelManager = (function() {
         return (typeof input === 'boolean' ? true : false);
         break;
       case 'object':
-        return ((typeof input === 'object' && input !== null) ? true : false);
+        return ((typeof input === 'object' && !Array.isArray(input) && input !== null) ? true : false);
         break;
       case 'function':
         return (typeof input === 'function' ? true : false);
@@ -63,19 +63,16 @@ const ChannelManager = (function() {
   // }
   // Format keyword is case insensitive
   function validateFormat(format) {
-    switch (typeof format) {
-      case 'string':
-        return validateKeyword(format);
-        break;
-      case 'object':
-        for (let key in format) {
-          if (!validateFormat(format[key])) { return false };
-        }
+    if (checkType(format, 'string')) {
+      return validateKeyword(format);
+    } else if (checkType(format, 'object')) {
+      for (let key in format) {
+        if (!validateFormat(format[key])) { return false };
+      }
 
-        return true;
-        break;
-      default:
-        throw new Error("Argument passed to validateFormat() function must be 'string' or 'object'.")
+      return true;
+    } else {
+      throw new Error("Argument passed to validateFormat() function must be 'string' or 'object'.")
     }
   }
 
@@ -255,21 +252,43 @@ const ChannelManager = (function() {
     },
     send(name, data, headers={}, filter, callback) {
       if (arguments.length < 2) {
-        throw new Error('.send() function expects at least 2 arguments: channel name and data.');
+        throw new Error('send() function expects at least 2 arguments: channel name and data.');
         return;
       }
 
-      if (!checkType(name, 'string', 'send')) {return;}
-      if (!checkType(headers, 'object', 'send')) {return;}
-      if (isEmptyString(name, 'send')) {return;}
-      if (!validateFormat(filter)) {
-        throw new Error(`Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`)
+      if (!checkType(name, 'string')) {
+        throw new Error("First argument passed to send() function must be of 'string' type.");
         return;
       }
-      if (!checkType(callback, 'function', 'send')) {return;}
-
+      if (isEmptyString(name)) {
+        emptyStringError('send');
+        return;
+      }
       if (!ChannelManager.exists(name)) {
         throw new Error (`Channel with name '${name}' does not exist.`);
+        return;
+      }
+
+      if (!checkType(headers, 'object')) {
+        throw new Error('Third argument passed to send() function must be an object.');
+        return;
+      }
+
+      // Throws custom error if the filter is not of string or object type
+      try {
+        validateFormat(filter);
+      } catch(error) {
+        throw new Error(`Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.`);
+        return;
+      }
+
+      if (!validateFormat(filter)) {
+        throw new Error(`Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.`);
+        return;
+      }
+
+      if (!checkType(callback, 'function')) {
+        throw new Error("Fifth argument passed to send() function must be of 'function' type.");
         return;
       }
 
@@ -278,11 +297,6 @@ const ChannelManager = (function() {
       //   throw new Error(`Data passed to .send() function does not match data format for '${name}' channel. Run .getFormat('${name}') to check the data format.`);
       //   return;
       // }
-
-      if (typeof headers !== 'object' || Array.isArray(headers) || headers == null) {
-        throw new Error('Data headers argument passed to .send() function must be an object.');
-        return;
-      }
 
       const channel = channels[name];
 

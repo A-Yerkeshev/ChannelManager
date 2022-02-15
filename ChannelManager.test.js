@@ -65,36 +65,47 @@ test("Confirm that closed channel does not exist", () => {
 })
 
 test("Validate input for .send()", () => {
-  expect(() => {CM.send()}).toThrow(".send() function expects at least 2 arguments: channel name and data.");
-  expect(() => {CM.send(1)}).toThrow(".send() function expects at least 2 arguments: channel name and data.");
+  expect(() => {CM.send()}).toThrow("send() function expects at least 2 arguments: channel name and data.");
+  expect(() => {CM.send(1)}).toThrow("send() function expects at least 2 arguments: channel name and data.");
 
   const data = [1, 2, 3];
   const headers = {object: 'box'};
   const filter = 'STRING';
   const callback = jest.fn();
 
-  expect(() => {CM.send(2, data)}).toThrow("Argument passed to .send() function must be of 'string' type.");
-  expect(() => {CM.send(true, data)}).toThrow("Argument passed to .send() function must be of 'string' type.");
-  expect(() => {CM.send([1,2,3], data)}).toThrow("Argument passed to .send() function must be of 'string' type.");
-  expect(() => {CM.send({}, data)}).toThrow("Argument passed to .send() function must be of 'string' type.");
-  expect(() => {CM.send(function testFunc() {}, data)}).toThrow("Argument passed to .send() function must be of 'string' type.");
-  expect(() => {CM.send(null, data)}).toThrow("Argument passed to .send() function must be of 'string' type.");
-  expect(() => {CM.send(undefined, data)}).toThrow("Argument passed to .send() function must be of 'string' type.");
+  expect(() => {CM.send('', data)}).toThrow("Argument passed to send() function cannot be empty string.");
+  expect(() => {CM.send(2, data)}).toThrow("First argument passed to send() function must be of 'string' type.");
+  expect(() => {CM.send(true, data)}).toThrow("First argument passed to send() function must be of 'string' type.");
+  expect(() => {CM.send([1,2,3], data)}).toThrow("First argument passed to send() function must be of 'string' type.");
+  expect(() => {CM.send({}, data)}).toThrow("First argument passed to send() function must be of 'string' type.");
+  expect(() => {CM.send(function testFunc() {}, data)}).toThrow("First argument passed to send() function must be of 'string' type.");
+  expect(() => {CM.send(null, data)}).toThrow("First argument passed to send() function must be of 'string' type.");
+  expect(() => {CM.send(undefined, data)}).toThrow("First argument passed to send() function must be of 'string' type.");
 
-  expect(() => {CM.send('test-channel', data, 'string')}).toThrow("Data headers argument passed to .send() function must be an object.");
-  expect(() => {CM.send('test-channel', data, 1)}).toThrow("Data headers argument passed to .send() function must be an object.");
-  expect(() => {CM.send('test-channel', data, true)}).toThrow("Data headers argument passed to .send() function must be an object.");
-  expect(() => {CM.send('test-channel', data, [1,2,3])}).toThrow("Data headers argument passed to .send() function must be an object.");
-  expect(() => {CM.send('test-channel', data, function testFunc() {})}).toThrow("Data headers argument passed to .send() function must be an object.");
-  expect(() => {CM.send('test-channel', data, null)}).toThrow("Data headers argument passed to .send() function must be an object.");
+  expect(() => {CM.send('test-channel', data, 'string')}).toThrow("Third argument passed to send() function must be an object.");
+  expect(() => {CM.send('test-channel', data, 1)}).toThrow("Third argument passed to send() function must be an object.");
+  expect(() => {CM.send('test-channel', data, true)}).toThrow("Third argument passed to send() function must be an object.");
+  expect(() => {CM.send('test-channel', data, [1,2,3])}).toThrow("Third argument passed to send() function must be an object.");
+  expect(() => {CM.send('test-channel', data, function testFunc() {})}).toThrow("Third argument passed to send() function must be an object.");
+  expect(() => {CM.send('test-channel', data, null)}).toThrow("Third argument passed to send() function must be an object.");
 
-  expect(() => {CM.send('test-channel', data, headers, 'text')}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
-  expect(() => {CM.send('test-channel', data, headers, 1)}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
-  expect(() => {CM.send('test-channel', data, headers, true)}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
-  expect(() => {CM.send('test-channel', data, headers, {})}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
-  expect(() => {CM.send('test-channel', data, headers, null)}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
-  expect(() => {CM.send('test-channel', data, headers, undefined)}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
-  expect(() => {CM.send('test-channel', data, headers, function testFunc() {})}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, 'text')}).toThrow("Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, 1)}).toThrow("Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, true)}).toThrow("Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, [1, 2, 3])}).toThrow("Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, null)}).toThrow("Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, undefined)}).toThrow("Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, function testFunc() {})}).toThrow("Fourth argument passed to send() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.")
+
+  expect(() => {CM.send('test-channel', data, headers, filter, 'string')}).toThrow("Fifth argument passed to send() function must be of 'function' type.");
+  expect(() => {CM.send('test-channel', data, headers, filter, 1)}).toThrow("Fifth argument passed to send() function must be of 'function' type.");
+  expect(() => {CM.send('test-channel', data, headers, filter, true)}).toThrow("Fifth argument passed to send() function must be of 'function' type.");
+  expect(() => {CM.send('test-channel', data, headers, filter, [1,2,3])}).toThrow("Fifth argument passed to send() function must be of 'function' type.");
+  expect(() => {CM.send('test-channel', data, headers, filter, {})}).toThrow("Fifth argument passed to send() function must be of 'function' type.");
+  expect(() => {CM.send('test-channel', data, headers, filter, null)}).toThrow("Fifth argument passed to send() function must be of 'function' type.");
+  expect(() => {CM.send('test-channel', data, headers, filter, undefined)}).toThrow("Fifth argument passed to send() function must be of 'function' type.");
+
+  expect(() => {CM.send('non-existent-channel', data)}).toThrow("Channel with name 'non-existent-channel' does not exist.");
 })
 
 test("Send data", () => {
