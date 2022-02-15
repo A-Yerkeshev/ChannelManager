@@ -2,7 +2,7 @@
 
 const ChannelManager = (function() {
   const channels = {};
-  const formats = ['ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT'];
+  const formats = ['ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL'];
 
   // Function that checks type of the input
   // type --- 'string', 'number', 'boolean', 'object', 'function', 'array', 'null', 'undefined', 'bigint', 'symbol'
@@ -43,25 +43,33 @@ const ChannelManager = (function() {
     }
   }
 
-  function argumentTypeError() {}
-
-  function isEmptyString(string, functionName) {
-    if (string === '') {
-      throw new Error(`Argument passed to .${functionName}() cannot be empty string.`);
-      return true;
-    } else {
-      return false;
-    }
+  function argumentTypeError(type, func) {
+    throw new Error(`Argument passed to ${func}() function must be of '${type}' type.`)
   }
 
+  function isEmptyString(string) {
+    string === '' ? true : false;
+  }
+
+  function emptyStringError(func) {
+    throw new Error(`Argument passed to ${func}() function cannot be empty string.`);
+  }
+
+  // Fuction that confirms that format is a valid keyword or object with valid keywords as values:
+  // ex: 'STRING', 'NUMBER' or {
+  //  width: 'NUMBER',
+  //  height: 'NUMBER',
+  //  color: 'STRING'
+  // }
+  // Format keyword is case insensitive
   function validateFormat(format) {
     switch (typeof format) {
       case 'string':
-        formats.includes(format) ? true : false;
+        return validateKeyword(format);
         break;
       case 'object':
         for (let key in format) {
-          if (!validateFormat(format[key])) {return false};
+          if (!validateFormat(format[key])) { return false };
         }
 
         return true;
@@ -71,14 +79,29 @@ const ChannelManager = (function() {
     }
   }
 
+  // Fuction that confirms that format is a valid keyword
+  // Format keyword is case insensitive
+  function validateKeyword(keyword) {
+    return formats.includes(format.toUpperCase()) ? true : false;
+  }
+
+  function invalidFormatError(func) {
+    throw new Error(`Format passed to ${func}() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword or object.`);
+  }
+
+  function invalidKeywordError(func) {
+    throw new Error(`Keyword passed to ${func}() function must be 'ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'NULL', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT', 'SYMBOL' keyword.`);
+  }
+
+  // Function that checks if data type matches provided format
   function validateData(data, format) {
     if (arguments.length !== 2) {
       throw new Error('validateData() function expects 2 arguments: data and data format.');
       return;
     }
     if (!validateFormat(formatKeyword)) {
-      throw new Error(`Format passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
-      return
+      invalidFormatError('validateData');
+      return;
     };
 
     switch (typeof format) {
@@ -96,7 +119,7 @@ const ChannelManager = (function() {
         return true;
         break;
       default:
-        throw new Error(`Format passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`);
+        invalidFormatError('validateData');
     }
   }
 
@@ -106,8 +129,8 @@ const ChannelManager = (function() {
       return;
     }
     if (!validateFormat(formatKeyword)) {
-      throw new Error(`Keyword passed to validateByKeyword() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT'.`);
-      return
+      invalidKeywordError('validateByKeyword');
+      return;
     };
 
     switch (formatKeyword) {
@@ -115,16 +138,16 @@ const ChannelManager = (function() {
         return true;
         break;
       case 'STRING':
-        return typeof data === 'string';
+        return checkType('string');
         break;
       case 'NUMBER':
-        return typeof data === 'number';
+        return checkType('number');
         break;
       case 'BOOLEAN':
-        return typeof data === 'boolean';
+        return checkType('boolean');
         break;
       case 'UNDEFINED':
-        return typeof data === 'undefined';
+        return checkType('undefined');
         break;
       case 'ARRAY':
         return checkType('array');
@@ -133,16 +156,16 @@ const ChannelManager = (function() {
         return checkType('object');
         break;
       case 'FUNCTION':
-        return typeof data === 'function';
+        return checkType('function');
         break;
       case 'BIGINT':
-        return typeof data === 'bigint';
+        return checkType('bigint');
         break;
       case 'SYMBOL':
-        return typrof data === 'symbol';
+        return checkType('symbol');
         break;
       default:
-        throw new Error(`Keyword passed to validateByKeyword() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT'.`);
+        invalidKeywordError('validateByKeyword');
     }
   }
 
