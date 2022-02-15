@@ -4,53 +4,46 @@ const ChannelManager = (function() {
   const channels = {};
   const formats = ['ANY', 'STRING', 'NUMBER','BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT'];
 
-  // type --- 'string', 'number', 'boolean', 'object', 'function'
-  function checkType(input, type, functionName) {
+  // Function that checks type of the input
+  // type --- 'string', 'number', 'boolean', 'object', 'function', 'array', 'null', 'undefined', 'bigint', 'symbol'
+  function checkType(input, type) {
     switch (type) {
       case 'string':
-        if (typeof input === 'string') {
-          return true;
-        } else {
-          throw new Error(`Argument passed to .${functionName}() function must be of 'string' type.`);
-          return false;
-        }
+        typeof input === 'string' ? true : false;
         break;
       case 'number':
-        if (typeof input === 'number') {
-          return true;
-        } else {
-          throw new Error(`Argument passed to .${functionName}() function must be of 'number' type.`);
-          return false;
-        }
+        typeof input === 'number' ? true : false;
         break;
       case 'boolean':
-        if (typeof input === 'boolean') {
-          return true;
-        } else {
-          throw new Error(`Argument passed to .${functionName}() function must be of 'boolean' type.`);
-          return false;
-        }
+        typeof input === 'boolean' ? true : false;
         break;
       case 'object':
-        if (typeof input === 'object') {
-          return true;
-        } else {
-          throw new Error(`Argument passed to .${functionName}() function must be of 'object' type.`);
-          return false;
-        }
+        (typeof input === 'object' && input !== null) ? true : false;
         break;
       case 'function':
-        if (typeof input === 'function') {
-          return true;
-        } else {
-          throw new Error(`Argument passed to .${functionName}() function must be of 'function' type.`);
-          return false;
-        }
+        typeof input === 'function' ? true : false;
+        break;
+      case 'array':
+        typeof Array.isArray(input) ? true : false;
+        break;
+      case 'null':
+        input === null ? true : false;
+        break;
+      case 'undefined':
+        typeof input === 'undefined' ? true : false;
+        break;
+      case 'bigint':
+        typeof input === 'bigint' ? true : false;
+        break;
+      case 'symbol':
+        typeof input === 'symbol' ? true : false;
         break;
       default:
-        throw new Error("Second argument passed to checkType function must be 'string', 'number', 'boolean', 'object' or 'function'");
+        throw new Error("Second argument passed to checkType() function must be 'string', 'number', 'boolean', 'object', 'function', 'array', 'null', 'undefined', 'bigint' or 'symbol'.");
     }
   }
+
+  function argumentTypeError() {}
 
   function isEmptyString(string, functionName) {
     if (string === '') {
@@ -68,7 +61,7 @@ const ChannelManager = (function() {
         break;
       case 'object':
         for (let key in format) {
-          !validateFormat(format[key]) ? false
+          if (!validateFormat(format[key])) {return false};
         }
 
         return true;
@@ -134,19 +127,19 @@ const ChannelManager = (function() {
         return typeof data === 'undefined';
         break;
       case 'ARRAY':
-        return Array.isArray(data);
+        return checkType('array');
         break;
       case 'OBJECT':
-        // Check if data is object, not array and not null
-        if (typeof data === 'object' && !Array.isArray(data) && data != null) {
-          return true;
-        } else {return false;}
+        return checkType('object');
         break;
       case 'FUNCTION':
         return typeof data === 'function';
         break;
       case 'BIGINT':
         return typeof data === 'bigint';
+        break;
+      case 'SYMBOL':
+        return typrof data === 'symbol';
         break;
       default:
         throw new Error(`Keyword passed to validateByKeyword() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT'.`);
@@ -221,7 +214,12 @@ const ChannelManager = (function() {
       }
 
       if (!checkType(name, 'string', 'send')) {return;}
+      if (!checkType(headers, 'object', 'send')) {return;}
       if (isEmptyString(name, 'send')) {return;}
+      if (!validateFormat(filter)) {
+        throw new Error(`Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.`)
+        return;
+      }
       if (!checkType(callback, 'function', 'send')) {return;}
 
       if (!ChannelManager.exists(name)) {

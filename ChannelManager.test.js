@@ -88,7 +88,13 @@ test("Validate input for .send()", () => {
   expect(() => {CM.send('test-channel', data, function testFunc() {})}).toThrow("Data headers argument passed to .send() function must be an object.");
   expect(() => {CM.send('test-channel', data, null)}).toThrow("Data headers argument passed to .send() function must be an object.");
 
-  expect(() => {CM.send('test-channel', data, headers, 'string')}).toThrow("Fi")
+  expect(() => {CM.send('test-channel', data, headers, 'text')}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, 1)}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, true)}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, {})}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, null)}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, undefined)}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
+  expect(() => {CM.send('test-channel', data, headers, function testFunc() {})}).toThrow("Fourth argument passed to validateData() function must be 'ANY', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'ARRAY', 'OBJECT', 'FUNCTION', 'BIGINT' keyword or object.")
 })
 
 test("Send data", () => {
