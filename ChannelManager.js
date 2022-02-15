@@ -225,6 +225,18 @@ const ChannelManager = (function() {
         }
       }
     },
+    exists(name) {
+      if (!checkType(name, 'string')) {
+        argumentTypeError('exists', 'string');
+        return;
+      }
+      if (isEmptyString(name)) {
+        emptyStringError('exists');
+        return;
+      }
+
+      return name in channels;
+    },
     close(name) {
       if (!checkType(name, 'string', 'close')) {return;}
       if (isEmptyString(name, 'close')) {return;}
@@ -399,12 +411,6 @@ const ChannelManager = (function() {
 
     //   return channels[name].format;
     // },
-    exists(name) {
-      if (!checkType(name, 'string', 'exists')) {return;}
-      if (isEmptyString(name, 'exists')) {return;}
-
-      return name in channels;
-    },
     // request(reqChannel, resChannel) {
     //   if (arguments.length !== 2) {
     //     throw new Error('.request() function expects 2 arguments: request channel name and response channel name.');
